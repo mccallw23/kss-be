@@ -34,6 +34,7 @@ module.exports = async (req, res) => {
 
     return res.status(200).json({
       status: session.status,
+      payment_status: session.payment_status,
       customer_email: session.customer_details?.email,
       tier: session.metadata?.tier,
     });

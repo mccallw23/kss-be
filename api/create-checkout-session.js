@@ -62,9 +62,8 @@ module.exports = async (req, res) => {
       ...(utm_campaign && { utm_campaign }),
     };
 
-    // Session configuration for embedded checkout
+    // Session configuration for redirect checkout
     const sessionConfig = {
-      ui_mode: 'embedded',
       mode: isSubscription ? 'subscription' : 'payment',
       line_items: [
         {
@@ -90,8 +89,9 @@ module.exports = async (req, res) => {
           message: 'Your order ships within 2-3 business days. You\'ll receive a confirmation email with tracking within 24 hours.',
         },
       },
-      // For embedded mode, use return_url instead of success_url/cancel_url
-      return_url: `${landingPageUrl}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      // Redirect URLs
+      success_url: `${landingPageUrl}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${landingPageUrl}/#buy`,
       // Metadata for webhooks
       metadata,
       // Prefill email if provided
@@ -115,8 +115,7 @@ module.exports = async (req, res) => {
 
     const session = await stripe.checkout.sessions.create(sessionConfig);
 
-    // For embedded mode, return client_secret instead of url
-    return res.status(200).json({ clientSecret: session.client_secret });
+    return res.status(200).json({ url: session.url });
   } catch (error) {
     console.error('Checkout session error:', error);
     return res.status(500).json({

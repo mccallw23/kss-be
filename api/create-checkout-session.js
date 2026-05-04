@@ -15,11 +15,16 @@ const PRICE_MAP = {
 const SUBSCRIPTION_TIERS = ['monthly', 'quarterly', 'biannual'];
 
 module.exports = async (req, res) => {
-  // CORS
+  // CORS - allow both www and non-www, plus localhost
   const origin = req.headers.origin;
-  const allowedOrigin = process.env.LANDING_PAGE_URL;
+  const allowedOrigins = [
+    process.env.LANDING_PAGE_URL,
+    process.env.LANDING_PAGE_URL?.replace('https://', 'https://www.'),
+    'http://localhost:8000',
+    'http://localhost:3000',
+  ];
 
-  if (origin === allowedOrigin || origin?.includes('localhost')) {
+  if (origin && (allowedOrigins.includes(origin) || origin.includes('localhost') || origin.includes('vercel.app'))) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');

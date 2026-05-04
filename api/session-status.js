@@ -1,8 +1,9 @@
+require('dotenv').config({ path: '.env.local' });
 const Stripe = require('stripe');
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 module.exports = async (req, res) => {
+  // Initialize Stripe inside handler (env vars loaded at request time)
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   // CORS - allow both www and non-www, plus localhost
   const origin = req.headers.origin;
   const allowedOrigins = [

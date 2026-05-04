@@ -4,10 +4,10 @@
   "description": "Stripe backend for Kitchen Sink Sender",
   "private": true,
   "scripts": {
-    "dev": "vercel dev",
     "deploy": "vercel --prod"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "stripe": "^14.0.0"
   },
   "engines": {

@@ -1,15 +1,5 @@
+require('dotenv').config({ path: '.env.local' });
 const Stripe = require('stripe');
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-// Map tier names to Price IDs (set in Vercel environment variables)
-const PRICE_MAP = {
-  single: process.env.PRICE_SINGLE,
-  monthly: process.env.PRICE_MONTHLY,
-  quarterly: process.env.PRICE_QUARTERLY,
-  biannual: process.env.PRICE_BIANNUAL,
-  kit: process.env.PRICE_KIT,
-};
 
 // Which tiers are subscriptions vs one-time
 const SUBSCRIPTION_TIERS = ['monthly', 'quarterly', 'biannual'];
@@ -40,7 +30,22 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Initialize Stripe and price map inside handler (env vars loaded at request time)
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const PRICE_MAP = {
+    single: process.env.PRICE_SINGLE,
+    monthly: process.env.PRICE_MONTHLY,
+    quarterly: process.env.PRICE_QUARTERLY,
+    biannual: process.env.PRICE_BIANNUAL,
+    kit: process.env.PRICE_KIT,
+  };
+
   try {
+    console.log('ENV CHECK:', {
+      STRIPE_KEY: process.env.STRIPE_SECRET_KEY ? 'SET' : 'MISSING',
+      PRICE_MONTHLY: process.env.PRICE_MONTHLY || 'MISSING'
+    });
+
     const { tier, quantity = 1, email, utm_source, utm_campaign } = req.body;
 
     // Validate tier

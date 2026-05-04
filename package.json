@@ -1,0 +1,16 @@
+{
+  "name": "kss-stripe",
+  "version": "1.0.0",
+  "description": "Stripe backend for Kitchen Sink Sender",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "stripe": "^14.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

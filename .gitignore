@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Environment variables (never commit!)
+.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
